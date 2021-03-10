@@ -50,3 +50,7 @@ smtp_authentication: "plain"
 errbit: False
 errbit_dir: "{{ home_dir }}/errbit"
 errbit_domain: "errbit.{{ domain }}"
+
+# DJND CUSTOM
+github_url: "https://github.com/danesjenovdan/consul.git"
+git_branch: "branch_name" # CHANGEME
