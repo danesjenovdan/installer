@@ -6,7 +6,7 @@
 
     - fail:
         msg: "service is not happy {{ webpage_https_with_domain.content }}"
-      when: "'CONSUL' not in webpage_https_with_domain.content"
+      when: "'Participativni' not in webpage_https_with_domain.content"
 
     - name: Redirect to https
       uri:
@@ -22,13 +22,29 @@
 
     - fail:
         msg: "service is not happy {{ webpage_https.content }}"
-      when: "'CONSUL' not in webpage_https.content"
+      when: "'Participativni' not in webpage_https.content"
 
     - name: Do not redirect to https
       uri:
         url: http://{{ server_hostname }}
         follow_redirects: no
         status_code: 200
+
+- when: lookup('env', 'CI')
+  block:
+    - action: uri url=https://127.0.0.1 return_content=yes validate_certs=False
+      register: webpage_https
+
+    - fail:
+        msg: "service is not happy {{ webpage_https.content }}"
+      when: "'Participativni' not in webpage_https.content"
+
+    - name: Redirect to https
+      uri:
+        url: http://{{ server_hostname }}
+        follow_redirects: no
+        validate_certs: yes
+        status_code: 301
 
 - name: Get running delayed job processes
   shell: "ps -ef | grep -v grep | grep -w delayed_job | awk '{print $2}'"
